@@ -30,14 +30,13 @@ long_description = (Path(__file__).parent / "README.md").read_text()
 
 setup(
     name='pyooz',
-    version='0.0.4',
-    license='GPL-2',
+    version='0.0.5',
     description="ooz decompression bindings",
     long_description=long_description,
     long_description_content_type="text/markdown",
     classifiers=[
         'Development Status :: 3 - Alpha',
-        'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
+        'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
         'Natural Language :: English',
         'Programming Language :: Python :: 3 :: Only',
     ],
