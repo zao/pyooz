@@ -1,5 +1,5 @@
 import os
-import pybind11
+from pybind11.setup_helpers import Pybind11Extension, build_ext
 from setuptools import setup, Extension
 
 ooz_sources = [
@@ -19,13 +19,9 @@ ooz_sources = [
 ]
 
 ext_modules = [
-    Extension(
+    Pybind11Extension(
         'ooz',
         sources=['ooz/ooz_bindings.cpp'] + ooz_sources,
-        include_dirs=[
-            pybind11.get_include(),
-        ],
-        language="c++",
     ),
 ]
 
@@ -39,5 +35,6 @@ setup(
         'Natural Language :: English',
         'Programming Language :: Python :: 3 :: Only',
     ],
+    cmdclass={"build_ext": build_ext},
     ext_modules=ext_modules,
 )
