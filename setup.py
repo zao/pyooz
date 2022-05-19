@@ -25,10 +25,16 @@ ext_modules = [
     ),
 ]
 
+from pathlib import Path
+long_description = (Path(__file__).parent / "README.md").read_text()
+
 setup(
     name='pyooz',
-    version='0.0.3',
+    version='0.0.4',
     license='GPL-2',
+    description="ooz decompression bindings",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     classifiers=[
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
