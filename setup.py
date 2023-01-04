@@ -14,6 +14,7 @@ ext_modules = [
     Pybind11Extension(
         'ooz',
         sources=['ooz/ooz_bindings.cpp'] + ooz_sources,
+        define_macros=[('OOZ_BUILD_DLL', 1)],
         include_dirs=['ooz/dep/ooz/simde'],
     ),
 ]
