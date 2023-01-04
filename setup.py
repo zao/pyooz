@@ -5,14 +5,6 @@ from setuptools import setup, Extension
 ooz_sources = [
     os.path.join('ooz/dep/ooz/', x) for x in [
         "bitknit.cpp",
-        "compr_entropy.cpp",
-        "compr_kraken.cpp",
-        "compr_leviathan.cpp",
-        "compr_match_finder.cpp",
-        "compr_mermaid.cpp",
-        "compr_multiarray.cpp",
-        "compr_tans.cpp",
-        "compress.cpp",
         "kraken.cpp",
         "lzna.cpp",
     ]
@@ -22,6 +14,7 @@ ext_modules = [
     Pybind11Extension(
         'ooz',
         sources=['ooz/ooz_bindings.cpp'] + ooz_sources,
+        include_dirs=['ooz/dep/ooz/simde'],
     ),
 ]
 
