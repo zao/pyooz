@@ -11,39 +11,12 @@ on: [push, pull_request]
 #       - published
 
 jobs:
-  generate_wheels_matrix:
-    name: Generate wheels matrix
-    runs-on: ubuntu-latest
-    outputs:
-      include: ${{ steps.set_matrix.outputs.include }}
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: recursive
-      - name: Install cibuildwheel
-        run: pipx install cibuildwheel
-      - id: set_matrix
-        run: |
-          MATRIX_INCLUDE=$(
-            {
-              cibuildwheel --print-build-identifiers --platform linux \
-              | jq -Rc '{"only": inputs, "os": "ubuntu-latest"}'
-            } | jq -sc
-          )
-          echo ::set-output name=include::"$MATRIX_INCLUDE"
-        env:
-          CIBW_ARCHS: aarch64
-
-
   build_wheels:
-    needs: generate_wheels_matrix
-    name: Build ${{ matrix.os }} ${{ matrix.only }}
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        only: [""]
-        include: ${{ fromJson(needs.build_wheels_matrix.outputs.include) }}
-    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v3
@@ -59,7 +32,7 @@ jobs:
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.11.3
         env:
-          CIBW_ARCHS_LINUX: "x86_64"
+          CIBW_ARCHS_LINUX: "x86_64 aarch64"
           CIBW_ARCHS_MACOS: "all"
           CIBW_ARCHS_WINDOWS: "AMD64 ARM64"
 
