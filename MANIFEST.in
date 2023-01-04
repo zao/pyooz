@@ -1,1 +1,2 @@
 include ooz/dep/ooz/*.cpp ooz/dep/ooz/*.h
+include ooz/dep/ooz/simde/simde/**
