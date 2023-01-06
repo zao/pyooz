@@ -1,6 +1,6 @@
 import os
-from pybind11.setup_helpers import Pybind11Extension, build_ext
 from setuptools import setup, Extension
+from wheel.bdist_wheel import bdist_wheel
 
 ooz_sources = [
     os.path.join('ooz/dep/ooz/', x) for x in [
@@ -11,13 +11,27 @@ ooz_sources = [
 ]
 
 ext_modules = [
-    Pybind11Extension(
-        'ooz',
+    Extension(
+        name='ooz',
         sources=['ooz/ooz_bindings.cpp'] + ooz_sources,
-        define_macros=[('OOZ_BUILD_DLL', 1)],
+        define_macros=[
+            ('OOZ_BUILD_DLL', 1),
+            ('Py_LIMITED_API', 0x03080000),
+        ],
         include_dirs=['ooz/dep/ooz/simde'],
+        py_limited_api=True,
     ),
 ]
+
+class bdist_wheel_abi3(bdist_wheel):
+    def get_tag(self):
+        python, abi, plat = super().get_tag()
+
+        if python.startswith("cp"):
+            # on CPython, our wheels are abi3 and compatible back to 3.6
+            return "cp38", "abi3", plat
+
+        return python, abi, plat
 
 from pathlib import Path
 long_description = (Path(__file__).parent / "README.md").read_text()
@@ -34,6 +48,6 @@ setup(
         'Natural Language :: English',
         'Programming Language :: Python :: 3 :: Only',
     ],
-    cmdclass={"build_ext": build_ext},
+    cmdclass={"bdist_wheel": bdist_wheel_abi3},
     ext_modules=ext_modules,
 )
